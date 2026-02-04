@@ -55,8 +55,8 @@ const Todos = () => {
   const handleToggleStatus = async (todo) => {
     try {
       const newStatus = todo.status === 'pending' ? 'completed' : 'pending';
-      const updated = await todoService.updateTodo(todo.id, { status: newStatus });
-      setTodos(todos.map(t => t.id === todo.id ? updated : t));
+      const updated = await todoService.updateTodo(todo._id, { status: newStatus });
+      setTodos(todos.map(t => t._id === todo._id ? updated : t));
     } catch (err) {
       setError(err.message);
     }
@@ -67,14 +67,14 @@ const Todos = () => {
 
     try {
       await todoService.deleteTodo(id);
-      setTodos(todos.filter(t => t.id !== id));
+      setTodos(todos.filter(t => t._id !== id));
     } catch (err) {
       setError(err.message);
     }
   };
 
   const handleEdit = (todo) => {
-    setEditingId(todo.id);
+    setEditingId(todo._id);
     setEditTitle(todo.title);
     setEditDescription(todo.description || '');
   };
@@ -85,7 +85,7 @@ const Todos = () => {
         title: editTitle,
         description: editDescription,
       });
-      setTodos(todos.map(t => t.id === id ? updated : t));
+      setTodos(todos.map(t => t._id === id ? updated : t));
       setEditingId(null);
     } catch (err) {
       setError(err.message);
@@ -226,10 +226,10 @@ const Todos = () => {
           ) : (
             filteredTodos.map(todo => (
               <div
-                key={todo.id}
+                key={todo._id}
                 className="bg-white rounded-lg shadow-md p-4"
               >
-                {editingId === todo.id ? (
+                {editingId === todo._id ? (
                   // Edit Mode
                   <div>
                     <input
@@ -246,7 +246,7 @@ const Todos = () => {
                     />
                     <div className="flex gap-2">
                       <button
-                        onClick={() => handleSaveEdit(todo.id)}
+                        onClick={() => handleSaveEdit(todo._id)}
                         className="bg-green-500 text-white px-4 py-1 rounded hover:bg-green-600"
                       >
                         Save
@@ -285,7 +285,7 @@ const Todos = () => {
                           <p className="text-gray-600 ml-8 mb-2">{todo.description}</p>
                         )}
                         <div className="ml-8 text-xs text-gray-400">
-                          Created: {new Date(todo.created_at).toLocaleString()}
+                          Created: {new Date(todo.createdAt).toLocaleString()}
                         </div>
                       </div>
                       <div className="flex gap-2">
@@ -296,7 +296,7 @@ const Todos = () => {
                           Edit
                         </button>
                         <button
-                          onClick={() => handleDelete(todo.id)}
+                          onClick={() => handleDelete(todo._id)}
                           className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm"
                         >
                           Delete
